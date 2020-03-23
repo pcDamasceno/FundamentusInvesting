@@ -11,11 +11,10 @@ import urllib3
 import requests
 from requests.exceptions import HTTPError, Timeout
 from bs4 import BeautifulSoup
+import pandas as pd
 
-stock_list = ['VVAR3', 'PETR4', 'GGBR4']
 
-
-def yahooStatistics(stock):
+def fundamentusStats(stock):
     try:
         sourceCode = requests.get(
             'https://www.fundamentus.com.br/detalhes.php?papel={}'.format(stock))
@@ -50,6 +49,10 @@ def yahooStatistics(stock):
     '''
 
 
-for stock in stock_list:
-    yahooStatistics(stock)
+stocks = pd.read_csv('lista_acoes_bovespa.csv')
+n_stocks = stocks.Codigo.count()
+stock_code = stocks.Codigo
+
+for i in range(n_stocks):
+    fundamentusStats(stock_code[i])
     time.sleep(1)
